@@ -12,7 +12,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 import sys
 import os
 from porn_sites import _get_porn_collection, _get_site_name
-
+import random
 sys.path.append(os.path.abspath("./porn_sites.py"))
 
 
@@ -67,18 +67,23 @@ def Test(_str, url):
     #  if the url if flaged as porn_ from the porn collection sites and the prediction score is higher then .55
     # then the score normalized up by .4 points for accurecy boost!.
     if url_in_porn_collection & (_is_porn_pred > .55):
-        _is_porn_pred += .4
+        _is_porn_pred += random.randint(20, 40)/100
 
     if _is_porn_pred > 1:
-        _is_porn_pred = 1-0.02
+        _is_porn_pred = 1-random.randint(1, 6)/100
     model_f.close()
     cv_f.close()
+
+    # return {
+    #     'porn': _is_porn_pred,
+    #     'non_porn': round(1-_is_porn_pred, 3),
+    #     'pred_arr': json.dumps(y_pred.tolist())
+    # }
+
     return {
         'porn': _is_porn_pred,
-        'non_porn': 1 - _is_porn_pred,
-        'pred_arr': json.dumps(y_pred.tolist())
+        'non_porn': round(1-_is_porn_pred, 3)
     }
-
 
 # Test("""
 # customize close
