@@ -27,7 +27,7 @@ h.wrap_links = False
 h.emphasis = "|||"
 
 
-@app.route('/api/fillter', methods=['GET', "POST"])
+@app.route('/api/filter', methods=['GET', 'POST'])
 def testFunc():
     try:
         if request.method == 'POST':
@@ -36,7 +36,11 @@ def testFunc():
             body = request.json
             url = body["url"]
 
-            with urllib.request.urlopen(url) as response:
+            req = urllib.request.Request(url)
+            req.add_header('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36')
+
+
+            with urllib.request.urlopen(req) as response:
                 charset = response.info().get_content_charset()
                 html = response.read().decode(charset)
                 result = h.handle(html)
